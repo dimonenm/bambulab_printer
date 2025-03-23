@@ -1,7 +1,8 @@
-import { BambuClient, Fan, UpdateFanCommand } from "bambu-node"
+import { BambuClient, Fan, UpdateFanCommand, GCodeFileCommand } from "bambu-node"
 async function main() {
 
-const job = new Job()
+	const gcodeFileName = 'Kisa A1 USilk PLA 49g 3h44m.gcode'
+	var catCommand = new GCodeFileCommand({ gcodeFileName })
 
 	// define a printer connection
 	const client = new BambuClient({
@@ -26,5 +27,6 @@ const job = new Job()
 
 	// connect to the printer
 	await client.connect()
+	await client.executeCommand(catCommand)
 }
 main()
