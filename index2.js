@@ -1,4 +1,4 @@
-import { BambuClient, Fan, UpdateFanCommand, GCodeFileCommand } from "bambu-node"
+import { BambuClient, GCodeFileCommand, Job, UpdateLightCommand } from "bambu-node"
 async function main() {
 
 	const gcodeFileName = 'Kisa A1 USilk PLA 49g 3h44m.gcode'
@@ -27,6 +27,42 @@ async function main() {
 
 	// connect to the printer
 	await client.connect()
-	await client.executeCommand(catCommand)
+	// var res = await client.executeCommand(catCommand)
+	// console.log('res: ', res);
+	// await client.disconnect()
+
+	// client.on("message", (topic, key, data) => {
+	// 	console.log('message: ')
+	// 	console.log('topic: ', topic)
+	// 	console.log('key: ', key)
+	// 	console.log('data: ', data)
+	// })
+	client.on('job:start', (job) => {
+		console.log('job:start')
+		console.log('job: ', job)
+	})
+	client.on('job:update', (job, updatePackage) => {
+		console.log('job:update')
+		console.log('job: ', job)
+		console.log('updatePackage: ', updatePackage)
+	})
+	// client.on('printer:dataUpdate', (data) => {
+	// 	console.log('job:dataUpdate')
+	// 	console.log('data: ', data)
+
+	// })
+	client.on('printer:statusUpdate', (oldStatus, newStatus) => {
+		console.log('job:statusUpdate')
+		console.log('oldStatus: ', oldStatus)
+		console.log('newStatus: ', newStatus)
+	})
+
+	// console.log('UpdateLightCommand: ', await client.executeCommand(
+	// 	new UpdateLightCommand(
+	// 		{ light: "chamber_light", mode: "on" }
+	// 	)))
+	console.log('GCodeFileCommand: ', await client.executeCommand(
+		new GCodeFileCommand('models/Kisa A1 USilk PLA 49g 3h44m.gcode')))
+
 }
 main()
